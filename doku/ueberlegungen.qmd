@@ -1,0 +1,59 @@
+---
+title: "Überlegungen"
+---
+
+Hier steht, wie wir vorgegangen sind und warum wir uns so entschieden haben.
+
+## Teil 1: Aufbau des Netzes
+
+- **Klassen wie in der Angabe:** `Neuron` → `Layer` → `NeuralNetwork`. Das ist langsamer als Matrizen,
+  aber man sieht bei jedem Neuron, was passiert. Das war uns wichtiger als Tempo.
+- **Kein numpy:** Wir wollten jede Rechnung selbst schreiben. Bei so kleinen Netzen ist reines Python schnell genug
+  (Teil 2 braucht ca. 23 Sekunden).
+- **Kostenfunktion ½·(ŷ − y)²:** Durch das ½ ist die Ableitung einfach `ŷ − y`. Das macht den Code kürzer.
+- **Sigmoid-Ableitung über den Ausgang:** `a · (1 − a)`. Dafür merkt sich jedes Neuron seinen letzten Ausgang.
+- **Stolperstelle:** Der Fehler für die vorige Schicht muss mit den **alten** Gewichten berechnet werden.
+  Deshalb rechnet `Layer.backward` zuerst `prev_errors` und passt erst danach die Gewichte an.
+- **Startwert (`random.seed(1)`):** So kommen bei jedem Lauf dieselben Gewichte heraus, und die Ergebnisse lassen sich vergleichen.
+
+## Teil 2: Training und Speichern
+
+- **Drei Formate, drei Zwecke:**
+  `.json` zum Wiederladen in Python, `.txt` zum Lesen und für C, `.h` für C ohne Datei (später ESP32).
+- **`.txt`-Format so gewählt, dass C es leicht lesen kann:** eine Zeile pro Neuron
+  (`neuron 1 bias … weights …`). Damit reicht in C ein einfaches `fscanf`.
+- **Test für den Export:** Das neu geladene Netz muss für alle Eingaben exakt dasselbe ausgeben. Das hat geklappt.
+
+## Teil 3: Vergleich mit TensorFlow
+
+- **Fairer Vergleich:** gleiche Architektur, 20000 Epochen, Lernrate 0,1 und `batch_size=1`, damit TensorFlow
+  wie unser Netz nach jedem einzelnen Beispiel lernt.
+- **Was wir gelernt haben:** TensorFlow ist bei XOR in einem **lokalen Minimum** hängen geblieben.
+  Mit nur 2 versteckten Neuronen entscheiden die Startgewichte, ob XOR klappt.
+- **Unterschied bei der Fehlerformel:** Keras mittelt den Fehler über alle Ausgänge. Dadurch ist der Gradient
+  beim 7-Segment-Netz kleiner, und TensorFlow lernt langsamer.
+- **Zeit:** TensorFlow war hier viel langsamer, weil bei winzigen Netzen der Aufwand pro Schritt größer ist
+  als die eigentliche Rechnung.
+
+## Teil 4 und 5: C
+
+- **Nur Vorhersage, kein Training:** Laut Angabe soll C nur vorwärts rechnen. Die Gewichte kommen aus Python.
+- **Gleiche Struktur wie in Python** (`Network` → `Layer` → `Neuron`), damit man beide Versionen vergleichen kann.
+- **Header mit Init-Funktion:** Python erzeugt die `.h` samt `SEG_NET_init()`. So muss niemand Zahlen abtippen,
+  und der ESP32 braucht später kein Dateisystem.
+- **Compiler:** Es war kein gcc installiert. `zig cc` lässt sich über pip installieren und ist ein vollwertiger
+  C-Compiler (clang). `build.bat` nimmt gcc, wenn vorhanden, sonst Zig.
+
+## Erklär-Website (zusätzlich)
+
+- **Ziel:** das Projekt in der Präsentation Schritt für Schritt zeigen können, mit Animationen statt Folien.
+- **Netz im Browser in JavaScript nachgebaut** (gleicher Algorithmus), damit man live zusehen kann, wie es lernt.
+  Die Gewichte für die Anzeige kommen aber aus den echten Python-Dateien.
+- **Kleiner lokaler Server** (nur Python-Standardbibliothek): Er startet die Skripte auf Knopfdruck.
+  Aus Sicherheitsgründen ist er nur lokal erreichbar und startet nur eine feste Liste von Befehlen.
+
+## Was wir anders machen würden
+
+- Gleich am Anfang mehrere Startwerte testen, statt nur einen. Das Problem mit dem lokalen Minimum wäre sonst
+  früher aufgefallen.
+- Die Zeitmessung in Teil 3 auch mit größeren Batches machen. Dann wäre TensorFlow fairer bewertet.

@@ -1,0 +1,41 @@
+---
+title: "Überblick"
+subtitle: "INSY · 5AHITS · Neural Network from Scratch"
+---
+
+## Aufgabe
+
+Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen,
+das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen.
+Die Übung hat 6 Teile. Teil 1–5 sind fertig. Teil 6 (ESP32) ist laut Lehrer noch nicht dran.
+
+## Was wir gebaut haben
+
+| Teil | Inhalt | Ort |
+|---|---|---|
+| 1 | Klassen `Neuron`, `Layer`, `NeuralNetwork` mit Training und Export | `python/nn.py` |
+| 2 | XOR (2-2-1) und 7-Segment (4-16-7) trainieren, speichern, neu laden, testen | `python/part2_train.py` |
+| 3 | Dieselben Netze mit TensorFlow, Vergleich | `python/part3_tensorflow.py` |
+| 4 | C-Programm lädt das Netz aus `.txt` | `c/part4_txt.c` |
+| 5 | C-Programm nutzt den erzeugten Header `.h` | `c/part5_header.c` |
+| extra | Erklär-Website mit Animationen, startet alle Skripte | `web/` |
+
+## Verwendete Tools
+
+| Tool | Wofür | Warum |
+|---|---|---|
+| Python 3.10 (nur Standardbibliothek) | Netz und Training | Jede Rechnung soll im eigenen Code sichtbar sein, keine fertige Mathe-Bibliothek |
+| TensorFlow / Keras | Vergleich in Teil 3 | Vorgabe der Aufgabe |
+| C99 mit Zig `cc` | Teil 4 und 5 | Auf dem Rechner war kein gcc; Zig bringt einen fertigen C-Compiler über `pip install ziglang` mit |
+| HTML, CSS, JavaScript, Python-`http.server` | Erklär-Website | Läuft ohne Installation; der kleine Server startet die Skripte |
+| Git + GitHub | Versionen, Abgabe | Kleine Commits, ein Commit pro Teil |
+| Quarto | diese Doku | Vorgabe im INSY-Regelwerk |
+| KI-Assistent | Code, Doku, Debugging | Im INSY-Unterricht ausdrücklich erlaubt |
+
+## Starten
+
+```bash
+cd python && python part2_train.py   # Teil 2
+c\build.bat                          # Teil 4 + 5 bauen
+python web/server.py                 # Website mit allem
+```

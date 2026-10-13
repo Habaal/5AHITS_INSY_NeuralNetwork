@@ -1,0 +1,34 @@
+---
+title: "Ergebnisse"
+---
+
+Alle Zahlen stammen aus den Dateien in `output/`.
+
+## Eigenes Netz (Teil 2)
+
+| Netz | Architektur | MSE am Ende | richtige Bits | Export → Import gleich |
+|---|---|---|---|---|
+| XOR | 2-2-1 | 0.00127 | 4/4 | ja |
+| 7-Segment | 4-16-7 | 0.00012 | 70/70 | ja |
+
+Bei XOR bleibt der Fehler bis etwa Epoche 6000 bei 0,25 und fällt dann stark ab. Das Netz muss erst „herausfinden“,
+wie es die beiden versteckten Neuronen unterschiedlich nutzt.
+
+## Vergleich mit TensorFlow (Teil 3)
+
+| Netz | Version | MSE am Ende | richtige Bits | Trainingszeit |
+|---|---|---|---|---|
+| XOR | eigenes Netz | 0.00127 | 4/4 | 0.9 s |
+| XOR | TensorFlow | 0.168 | 3/4 | 858 s |
+| 7-Segment | eigenes Netz | 0.00012 | 70/70 | 20 s |
+| 7-Segment | TensorFlow | 0.00071 | 70/70 | 1085 s |
+
+## C (Teil 4 und 5)
+
+Beide C-Programme liefern dieselben Ausgaben wie Python, mit 70/70 richtigen Bits.
+
+## Fazit
+
+Ein neuronales Netz besteht am Ende nur aus Malnehmen, Zusammenzählen und der Sigmoid-Funktion.
+Lernen heißt, alle Gewichte 20000-mal ein kleines Stück in die Richtung zu schieben, in der der Fehler kleiner wird.
+Das trainierte Netz besteht nur aus Zahlen. Deshalb kann man es speichern und in jeder Sprache wieder benutzen.

@@ -1,0 +1,20 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Neuronales Netz von Grund auf"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Überblick
+      - href: ueberlegungen.qmd
+        text: Überlegungen
+      - href: ergebnisse.qmd
+        text: Ergebnisse
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    lang: de
