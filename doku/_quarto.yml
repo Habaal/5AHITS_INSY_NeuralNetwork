@@ -12,6 +12,8 @@ website:
         text: Überlegungen
       - href: ergebnisse.qmd
         text: Ergebnisse
+      - href: tokens.qmd
+        text: Token-Verbrauch
 
 format:
   html:

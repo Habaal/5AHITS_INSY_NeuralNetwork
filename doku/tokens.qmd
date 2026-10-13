@@ -1,0 +1,72 @@
+---
+title: "Token-Verbrauch"
+---
+
+Das ganze Projekt (Code, Website, Doku, Fehlersuche) entstand mit einem KI-Assistenten (Claude Code).
+Hier steht, wie viele Tokens dafür verbraucht wurden und was wir getan haben, um sparsam zu bleiben.
+
+::: {.callout-note}
+**Gemessen am 13.10.2026**, aus dem Protokoll der Sitzung (Nachrichten je Antwort gezählt, doppelte Einträge entfernt)
+und aus der Nutzungsanzeige des Programms. Die Summen sind ungefähr, weil sie noch bis zum Ende der Sitzung wachsen.
+Preise haben wir nicht ausgerechnet, weil sie vom Tarif abhängen.
+:::
+
+## Verbrauch in dieser Sitzung
+
+| Art | Tokens | Bedeutung |
+|---|---:|---|
+| Neu gelesene Eingabe | ca. 200 | Text, der nicht aus dem Zwischenspeicher kam |
+| **Ausgabe** | **ca. 139 000** | Alles, was die KI geschrieben hat (Code, Doku, Antworten) |
+| In den Zwischenspeicher geschrieben | ca. 678 000 | Gesprächsverlauf, der neu gespeichert wurde |
+| Aus dem Zwischenspeicher gelesen | ca. 20 500 000 | Bei jeder Antwort wird der bisherige Verlauf erneut gelesen |
+
+| Modell | Antworten | Ausgabe-Tokens |
+|---|---:|---:|
+| Opus 5.5 | 100 | ca. 135 900 |
+| Sonnet 5.5 | 8 | ca. 3 500 |
+
+**Wie man die Zahlen liest:** Die große Zahl (20,5 Mio.) sieht dramatisch aus, ist aber gewollt:
+Der Zwischenspeicher (*Prompt Caching*) sorgt dafür, dass der lange Verlauf bei jeder Antwort nicht neu
+berechnet werden muss. Er wird deutlich günstiger abgerechnet als neue Eingabe. Entscheidend für den echten
+Aufwand sind vor allem die **Ausgabe-Tokens** und der **Verlauf**: Je länger ein Gespräch, desto mehr wird bei jeder Antwort mitgelesen.
+
+## Füllstand des Gesprächs
+
+| | |
+|---|---|
+| Verlauf zum Messzeitpunkt | ca. 268 000 von 1 000 000 Tokens (27 %) |
+| davon Nachrichten | ca. 188 000 |
+| davon Werkzeuge, Skills, Systemtext, Merkdateien | ca. 76 000 |
+| Automatisches Zusammenfassen ab | 97 % |
+
+Das Gespräch war also nie in Gefahr, abgeschnitten zu werden.
+
+## Tarif-Limits
+
+Tarif: Pro. Zum Messzeitpunkt waren 16 % des 5-Stunden-Limits und 37 % des Wochenlimits (alle Modelle) verbraucht.
+Das Wochenlimit enthält auch andere Arbeit des Kontos, nicht nur dieses Projekt.
+
+## Wie wir Tokens gespart haben
+
+- **Feste Sparregel** in der persönlichen Konfiguration (`CLAUDE.md`): kurz antworten, nur nötige Dateiteile lesen,
+  unabhängige Werkzeugaufrufe zusammenfassen. Qualität und Prüfungen gehen dabei immer vor.
+- **Knappe Antwortweise („Caveman-Modus“)** für Zwischenmeldungen: keine Füllsätze, weniger Ausgabe-Tokens.
+- **Keine Sub-Agenten** gestartet. Jeder Sub-Agent beginnt ohne Vorwissen und müsste den Zusammenhang neu lesen.
+- **Langsame Läufe im Hintergrund:** Der TensorFlow-Vergleich (ca. 30 Minuten) lief im Hintergrund, ohne dass dabei
+  ständig nachgefragt wurde.
+- **Ergebnisse in Dateien statt im Gespräch:** Trainingsausgaben liegen in `output/`. Die Website und die Doku lesen sie von dort,
+  statt dass lange Ausgaben im Chat wiederholt werden.
+- **Bewusst breit gebaut, dann geprüft:** Website und Skripte wurden in wenigen großen Schritten geschrieben und im Browser
+  getestet, statt viele kleine Änderungen einzeln zu besprechen.
+
+## Was mehr Tokens gekostet hat
+
+- Die **Erklär-Website** (rund 1 900 Zeilen HTML, CSS und JavaScript) war mit Abstand der größte Einzelposten bei der Ausgabe.
+- **Tests im Browser** (Screenshots und Seitenabfragen) und der **Fehler mit den Windows-Zeilenumbrüchen** brauchten zusätzliche Runden.
+- Die langen Nachrichten des Datei-Lesens am Anfang (PDF-Aufgabenblätter).
+
+## Fazit
+
+Ein Projekt dieser Größe (fünf Teile, Website, Doku) braucht rund 140 000 Ausgabe-Tokens.
+Der meiste Verbrauch entsteht nicht durch das Schreiben, sondern durch das ständige Mitlesen des langen Verlaufs.
+Kurze, klar abgegrenzte Aufträge und das Auslagern langer Ausgaben in Dateien sind deshalb die wirksamsten Sparmaßnahmen.
