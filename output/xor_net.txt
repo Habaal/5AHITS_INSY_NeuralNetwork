@@ -1,0 +1,9 @@
+layers 2
+inputs 2
+
+layer 1 neurons 2 activation sigmoid
+neuron 1 bias 2.6149192763 weights -5.2188716945 5.4229929923
+neuron 2 bias -3.0630692515 weights -5.6721284669 5.5630666137
+
+layer 2 neurons 1 activation sigmoid
+neuron 1 bias 3.6935137025 weights -7.8864043949 8.1839284416

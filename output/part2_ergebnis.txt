@@ -1,0 +1,47 @@
+=== XOR trainieren (2-2-1, 20000 Epochen, alpha 0.1) ===
+Epoche      0  MSE 0.261857
+Epoche   2000  MSE 0.252460
+Epoche   4000  MSE 0.252163
+Epoche   6000  MSE 0.249649
+Epoche   8000  MSE 0.112956
+Epoche  10000  MSE 0.010643
+Epoche  12000  MSE 0.004579
+Epoche  14000  MSE 0.002826
+Epoche  16000  MSE 0.002020
+Epoche  18000  MSE 0.001562
+Epoche  19999  MSE 0.001270
+
+--- Test XOR: trainiert vs. geladen ---
+[0, 0] -> [0.036]  Bits [0]  erwartet [0]  OK
+[0, 1] -> [0.967]  Bits [1]  erwartet [1]  OK
+[1, 0] -> [0.959]  Bits [1]  erwartet [1]  OK
+[1, 1] -> [0.032]  Bits [0]  erwartet [0]  OK
+Export/Import identisch: True
+Richtige Bits: 4/4
+
+=== 7-Segment trainieren (4-16-7, 20000 Epochen, alpha 0.1) ===
+Epoche      0  MSE 0.388833
+Epoche   2000  MSE 0.003581
+Epoche   4000  MSE 0.001027
+Epoche   6000  MSE 0.000562
+Epoche   8000  MSE 0.000379
+Epoche  10000  MSE 0.000283
+Epoche  12000  MSE 0.000225
+Epoche  14000  MSE 0.000185
+Epoche  16000  MSE 0.000158
+Epoche  18000  MSE 0.000137
+Epoche  19999  MSE 0.000121
+
+--- Test 7-Segment: trainiert vs. geladen ---
+[0, 0, 0, 0] -> [0.984, 1.0, 0.995, 0.986, 0.992, 0.994, 0.019]  Bits [1, 1, 1, 1, 1, 1, 0]  erwartet [1, 1, 1, 1, 1, 1, 0]  OK
+[0, 0, 0, 1] -> [0.022, 0.999, 1.0, 0.018, 0.0, 0.012, 0.0]  Bits [0, 1, 1, 0, 0, 0, 0]  erwartet [0, 1, 1, 0, 0, 0, 0]  OK
+[0, 0, 1, 0] -> [1.0, 0.994, 0.019, 0.998, 0.998, 0.011, 0.985]  Bits [1, 1, 0, 1, 1, 0, 1]  erwartet [1, 1, 0, 1, 1, 0, 1]  OK
+[0, 0, 1, 1] -> [1.0, 0.994, 0.987, 0.989, 0.012, 0.002, 0.985]  Bits [1, 1, 1, 1, 0, 0, 1]  erwartet [1, 1, 1, 1, 0, 0, 1]  OK
+[0, 1, 0, 0] -> [0.019, 0.984, 1.0, 0.016, 0.014, 1.0, 0.984]  Bits [0, 1, 1, 0, 0, 1, 1]  erwartet [0, 1, 1, 0, 0, 1, 1]  OK
+[0, 1, 0, 1] -> [0.98, 0.02, 1.0, 0.978, 0.0, 0.994, 0.989]  Bits [1, 0, 1, 1, 0, 1, 1]  erwartet [1, 0, 1, 1, 0, 1, 1]  OK
+[0, 1, 1, 0] -> [1.0, 0.015, 0.988, 0.997, 0.986, 0.989, 1.0]  Bits [1, 0, 1, 1, 1, 1, 1]  erwartet [1, 0, 1, 1, 1, 1, 1]  OK
+[0, 1, 1, 1] -> [0.985, 0.985, 1.0, 0.013, 0.0, 0.009, 0.023]  Bits [1, 1, 1, 0, 0, 0, 0]  erwartet [1, 1, 1, 0, 0, 0, 0]  OK
+[1, 0, 0, 0] -> [1.0, 0.999, 0.992, 1.0, 0.992, 1.0, 0.995]  Bits [1, 1, 1, 1, 1, 1, 1]  erwartet [1, 1, 1, 1, 1, 1, 1]  OK
+[1, 0, 0, 1] -> [0.998, 0.99, 1.0, 1.0, 0.001, 0.989, 0.991]  Bits [1, 1, 1, 1, 0, 1, 1]  erwartet [1, 1, 1, 1, 0, 1, 1]  OK
+Export/Import identisch: True
+Richtige Bits: 70/70
