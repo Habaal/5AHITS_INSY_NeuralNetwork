@@ -1,5 +1,7 @@
 # Neuronales Netz von Grund auf (INSY, 5AHITS)
 
+**Team:** Martin Haberl und Samael Kraml (5AHITS)
+
 Umsetzung der Übung „Neural Network from Scratch“ (Teil 1–5).
 Teil 6 (ESP32) gehört nicht zu unserer Aufgabe.
 
