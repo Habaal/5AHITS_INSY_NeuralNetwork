@@ -1,0 +1,5 @@
+__pycache__/
+*.exe
+*.pdb
+*.obj
+output/part3_raw.txt
