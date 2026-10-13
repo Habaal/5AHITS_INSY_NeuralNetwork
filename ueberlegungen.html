@@ -172,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="teil-2-training-und-speichern" class="level2">
 <h2 class="anchored" data-anchor-id="teil-2-training-und-speichern">Teil 2: Training und Speichern</h2>
 <ul>
-<li><strong>Drei Formate, drei Zwecke:</strong> <code>.json</code> zum Wiederladen in Python, <code>.txt</code> zum Lesen und für C, <code>.h</code> für C ohne Datei (später ESP32).</li>
+<li><strong>Drei Formate, drei Zwecke:</strong> <code>.json</code> zum Wiederladen in Python, <code>.txt</code> zum Lesen und für C, <code>.h</code> für C ohne Datei.</li>
 <li><strong><code>.txt</code>-Format so gewählt, dass C es leicht lesen kann:</strong> eine Zeile pro Neuron (<code>neuron 1 bias … weights …</code>). Damit reicht in C ein einfaches <code>fscanf</code>.</li>
 <li><strong>Test für den Export:</strong> Das neu geladene Netz muss für alle Eingaben exakt dasselbe ausgeben. Das hat geklappt.</li>
 </ul>
@@ -191,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><strong>Nur Vorhersage, kein Training:</strong> Laut Angabe soll C nur vorwärts rechnen. Die Gewichte kommen aus Python.</li>
 <li><strong>Gleiche Struktur wie in Python</strong> (<code>Network</code> → <code>Layer</code> → <code>Neuron</code>), damit man beide Versionen vergleichen kann.</li>
-<li><strong>Header mit Init-Funktion:</strong> Python erzeugt die <code>.h</code> samt <code>SEG_NET_init()</code>. So muss niemand Zahlen abtippen, und der ESP32 braucht später kein Dateisystem.</li>
+<li><strong>Header mit Init-Funktion:</strong> Python erzeugt die <code>.h</code> samt <code>SEG_NET_init()</code>. So muss niemand Zahlen abtippen, und das C-Programm braucht zur Laufzeit keine Datei.</li>
 <li><strong>Compiler:</strong> Es war kein gcc installiert. <code>zig cc</code> lässt sich über pip installieren und ist ein vollwertiger C-Compiler (clang). <code>build.bat</code> nimmt gcc, wenn vorhanden, sonst Zig.</li>
 </ul>
 </section>

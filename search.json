@@ -18,7 +18,7 @@
     "href": "ueberlegungen.html#teil-2-training-und-speichern",
     "title": "Überlegungen",
     "section": "Teil 2: Training und Speichern",
-    "text": "Teil 2: Training und Speichern\n\nDrei Formate, drei Zwecke: .json zum Wiederladen in Python, .txt zum Lesen und für C, .h für C ohne Datei (später ESP32).\n.txt-Format so gewählt, dass C es leicht lesen kann: eine Zeile pro Neuron (neuron 1 bias … weights …). Damit reicht in C ein einfaches fscanf.\nTest für den Export: Das neu geladene Netz muss für alle Eingaben exakt dasselbe ausgeben. Das hat geklappt."
+    "text": "Teil 2: Training und Speichern\n\nDrei Formate, drei Zwecke: .json zum Wiederladen in Python, .txt zum Lesen und für C, .h für C ohne Datei.\n.txt-Format so gewählt, dass C es leicht lesen kann: eine Zeile pro Neuron (neuron 1 bias … weights …). Damit reicht in C ein einfaches fscanf.\nTest für den Export: Das neu geladene Netz muss für alle Eingaben exakt dasselbe ausgeben. Das hat geklappt."
   },
   {
     "objectID": "ueberlegungen.html#teil-3-vergleich-mit-tensorflow",
@@ -32,7 +32,7 @@
     "href": "ueberlegungen.html#teil-4-und-5-c",
     "title": "Überlegungen",
     "section": "Teil 4 und 5: C",
-    "text": "Teil 4 und 5: C\n\nNur Vorhersage, kein Training: Laut Angabe soll C nur vorwärts rechnen. Die Gewichte kommen aus Python.\nGleiche Struktur wie in Python (Network → Layer → Neuron), damit man beide Versionen vergleichen kann.\nHeader mit Init-Funktion: Python erzeugt die .h samt SEG_NET_init(). So muss niemand Zahlen abtippen, und der ESP32 braucht später kein Dateisystem.\nCompiler: Es war kein gcc installiert. zig cc lässt sich über pip installieren und ist ein vollwertiger C-Compiler (clang). build.bat nimmt gcc, wenn vorhanden, sonst Zig."
+    "text": "Teil 4 und 5: C\n\nNur Vorhersage, kein Training: Laut Angabe soll C nur vorwärts rechnen. Die Gewichte kommen aus Python.\nGleiche Struktur wie in Python (Network → Layer → Neuron), damit man beide Versionen vergleichen kann.\nHeader mit Init-Funktion: Python erzeugt die .h samt SEG_NET_init(). So muss niemand Zahlen abtippen, und das C-Programm braucht zur Laufzeit keine Datei.\nCompiler: Es war kein gcc installiert. zig cc lässt sich über pip installieren und ist ein vollwertiger C-Compiler (clang). build.bat nimmt gcc, wenn vorhanden, sonst Zig."
   },
   {
     "objectID": "ueberlegungen.html#erklär-website-zusätzlich",
@@ -53,14 +53,14 @@
     "href": "index.html",
     "title": "Überblick",
     "section": "",
-    "text": "Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen, das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen. Die Übung hat 6 Teile. Teil 1–5 sind fertig. Teil 6 (ESP32) ist laut Lehrer noch nicht dran."
+    "text": "Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen, das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen. Die Übung hat 6 Teile. Wir haben Teil 1–5 umgesetzt, Teil 6 (ESP32) gehört nicht zu unserer Aufgabe."
   },
   {
     "objectID": "index.html#aufgabe",
     "href": "index.html#aufgabe",
     "title": "Überblick",
     "section": "",
-    "text": "Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen, das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen. Die Übung hat 6 Teile. Teil 1–5 sind fertig. Teil 6 (ESP32) ist laut Lehrer noch nicht dran."
+    "text": "Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen, das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen. Die Übung hat 6 Teile. Wir haben Teil 1–5 umgesetzt, Teil 6 (ESP32) gehört nicht zu unserer Aufgabe."
   },
   {
     "objectID": "index.html#was-wir-gebaut-haben",
