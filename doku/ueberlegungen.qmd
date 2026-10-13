@@ -19,7 +19,7 @@ Hier steht, wie wir vorgegangen sind und warum wir uns so entschieden haben.
 ## Teil 2: Training und Speichern
 
 - **Drei Formate, drei Zwecke:**
-  `.json` zum Wiederladen in Python, `.txt` zum Lesen und für C, `.h` für C ohne Datei (später ESP32).
+  `.json` zum Wiederladen in Python, `.txt` zum Lesen und für C, `.h` für C ohne Datei.
 - **`.txt`-Format so gewählt, dass C es leicht lesen kann:** eine Zeile pro Neuron
   (`neuron 1 bias … weights …`). Damit reicht in C ein einfaches `fscanf`.
 - **Test für den Export:** Das neu geladene Netz muss für alle Eingaben exakt dasselbe ausgeben. Das hat geklappt.
@@ -40,7 +40,7 @@ Hier steht, wie wir vorgegangen sind und warum wir uns so entschieden haben.
 - **Nur Vorhersage, kein Training:** Laut Angabe soll C nur vorwärts rechnen. Die Gewichte kommen aus Python.
 - **Gleiche Struktur wie in Python** (`Network` → `Layer` → `Neuron`), damit man beide Versionen vergleichen kann.
 - **Header mit Init-Funktion:** Python erzeugt die `.h` samt `SEG_NET_init()`. So muss niemand Zahlen abtippen,
-  und der ESP32 braucht später kein Dateisystem.
+  und das C-Programm braucht zur Laufzeit keine Datei.
 - **Compiler:** Es war kein gcc installiert. `zig cc` lässt sich über pip installieren und ist ein vollwertiger
   C-Compiler (clang). `build.bat` nimmt gcc, wenn vorhanden, sonst Zig.
 

@@ -439,7 +439,6 @@ inits['k-ueberblick'] = () => {
     { x: 210, y: 30, t: 'Training', s: 'Teil 2 · XOR, 7-Seg' },
     { x: 400, y: 30, t: 'Speichern', s: '.json · .txt · .h' },
     { x: 590, y: 30, t: 'C-Programm', s: 'Teil 4 + 5' },
-    { x: 780, y: 30, t: 'ESP32', s: 'Teil 6 · später' },
     { x: 210, y: 150, t: 'TensorFlow', s: 'Teil 3 · Vergleich' },
   ];
   const boxes = B.map((b) => {
@@ -447,7 +446,6 @@ inits['k-ueberblick'] = () => {
     svg('rect', { x: b.x, y: b.y, width: 160, height: 66, rx: 10 }, g);
     svg('text', { x: b.x + 80, y: b.y + 24 }, g).textContent = b.t;
     svg('text', { x: b.x + 80, y: b.y + 46, class: 's' }, g).textContent = b.s;
-    if (b.t === 'ESP32') g.setAttribute('opacity', .55);
     return g;
   });
   const links = [[0, 1], [1, 2], [2, 3], [3, 4], [1, 5]];
@@ -463,7 +461,6 @@ inits['k-ueberblick'] = () => {
     'Teil 2: Das Netz lernt XOR und den 7-Segment-Decoder (20000 Epochen).',
     'Danach speichern wir alle Gewichte: .json für Python, .txt und .h für C.',
     'Teil 4 + 5: Ein C-Programm lädt die Gewichte und rechnet nur noch vorwärts.',
-    'Teil 6 (später): derselbe C-Code läuft auf einem ESP32 mit echter Anzeige.',
     'Teil 3: Zum Vergleich trainieren wir dieselben Netze mit TensorFlow.',
   ];
   let busy = false;
@@ -1216,7 +1213,7 @@ inits['k-c'] = async () => {
       ['net', 'c', 'Die Zahlen landen in den Structs Network → Layer → Neuron.'],
       ['pred', 'e', 'net_predict() rechnet vorwärts – nur Malnehmen, Zusammenzählen, Sigmoid. Kein Training.'],
       ['h', null, '<b>Teil 5:</b> Die Gewichte stehen schon im Header als <code>static const float</code>-Arrays.'],
-      ['init', 'b', 'SEG_NET_init() reserviert Speicher und kopiert die Konstanten – keine Datei nötig (gut für den ESP32).'],
+      ['init', 'b', 'SEG_NET_init() reserviert Speicher und kopiert die Konstanten – keine Datei nötig.'],
       ['net', 'd', 'Ab hier ist alles gleich wie in Teil 4.'],
       ['pred', 'e', 'Gleiches Netz, gleiche Ergebnisse: 70/70 Bits richtig.'],
     ];

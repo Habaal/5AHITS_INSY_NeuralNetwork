@@ -7,7 +7,7 @@ subtitle: "INSY · 5AHITS · Neural Network from Scratch"
 
 Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen,
 das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen.
-Die Übung hat 6 Teile. Teil 1–5 sind fertig. Teil 6 (ESP32) ist laut Lehrer noch nicht dran.
+Die Übung hat 6 Teile. Wir haben Teil 1–5 umgesetzt, Teil 6 (ESP32) gehört nicht zu unserer Aufgabe.
 
 ## Was wir gebaut haben
 

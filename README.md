@@ -1,7 +1,9 @@
 # Neuronales Netz von Grund auf (INSY, 5AHITS)
 
 Umsetzung der Übung „Neural Network from Scratch“ (Teil 1–5).
-Teil 6 (ESP32) ist laut Lehrer noch nicht dran.
+Teil 6 (ESP32) gehört nicht zu unserer Aufgabe.
+
+**Doku online lesen:** https://habaal.github.io/5AHITS_INSY_NeuralNetwork/ (Quarto-Doku mit Überblick, Überlegungen, Ergebnissen und Token-Verbrauch)
 
 ## Ordner
 
@@ -13,7 +15,7 @@ Teil 6 (ESP32) ist laut Lehrer noch nicht dran.
 | `c/nn.h`, `c/nn.c` | Netz in C (nur Forward/Predict), Laden aus `.txt` |
 | `c/part4_txt.c` | **Teil 4:** Netz aus `output/7seg_net.txt` laden und testen |
 | `c/part5_header.c` | **Teil 5:** Netz aus `output/7seg_net.h` initialisieren und testen |
-| `CLAUDE.md` | Regeln für den KI-Assistenten (Sparregel, Git, Subagents, INSY-Vorgaben) |
+| `CLAUDE.md` | Regeln für den KI-Assistenten (nur der INSY-Abschnitt) |
 | `doku/` | Quarto-Doku (Überblick, Überlegungen, Ergebnisse): `cd doku && quarto preview` |
 | `web/` | Erklär-Website mit Animationen (`python web/server.py`) |
 | `output/` | exportierte Netze (`.json`, `.txt`, `.h`) und Testausgaben (`partX_ergebnis.txt`) |
@@ -72,7 +74,7 @@ Eingang der nächsten. Der Ausgang der letzten Schicht ist die Vorhersage.
 - `.json` – zum Wiederladen in Python (`NeuralNetwork.load`).
 - `.txt` – lesbar, eine Zeile pro Neuron (`neuron 1 bias ... weights ...`); C liest sie mit `fscanf`.
 - `.h` – alle Gewichte als C-Konstanten plus Funktion `SEG_NET_init()`, die das Netz damit aufbaut.
-  So braucht das C-Programm (und später der ESP32) keine Datei zur Laufzeit.
+  So braucht das C-Programm keine Datei zur Laufzeit.
 
 **C-Version:** dieselben Structs (`Neuron`, `Layer`, `Network`), aber nur `net_forward`/`net_predict`,
 kein Training. Die Gewichte kommen aus Python.

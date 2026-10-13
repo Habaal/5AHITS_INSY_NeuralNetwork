@@ -291,7 +291,7 @@ neuron.update(delta, learning_rate)       # w -= α · delta · x ;  b -= α · 
     <ul>
       <li><b>.json</b> – zum Wiederladen in Python (<code>NeuralNetwork.load</code>). Test: das geladene Netz rechnet exakt gleich.</li>
       <li><b>.txt</b> – für Menschen lesbar und für C mit <code>fscanf</code> einlesbar (Teil 4).</li>
-      <li><b>.h</b> – C-Header mit allen Zahlen als Konstanten und der Funktion <code>SEG_NET_init()</code> (Teil 5). So braucht das C-Programm – und später der ESP32 – keine Datei.</li>
+      <li><b>.h</b> – C-Header mit allen Zahlen als Konstanten und der Funktion <code>SEG_NET_init()</code> (Teil 5). So braucht das C-Programm – keine Datei.</li>
     </ul>
   </div>
 </section>
@@ -385,7 +385,7 @@ neuron.update(delta, learning_rate)       # w -= α · delta · x ;  b -= α · 
       <li><b>Export:</b> .json (Python), .txt (lesbar + C), .h (C-Header).</li>
       <li><b>TensorFlow:</b> gleiche Idee; bei XOR hängen geblieben, bei winzigen Netzen viel langsamer.</li>
       <li><b>C:</b> nur Vorhersage, Gewichte aus Datei oder Header, gleiche Ergebnisse.</li>
-      <li><b>Später:</b> Teil 6 – derselbe C-Code auf einem ESP32 mit echter 7-Segment-Anzeige.</li>
+      
     </ol>
   </div>
 </section>
