@@ -1,0 +1,170 @@
+[
+  {
+    "objectID": "ueberlegungen.html",
+    "href": "ueberlegungen.html",
+    "title": "Überlegungen",
+    "section": "",
+    "text": "Hier steht, wie wir vorgegangen sind und warum wir uns so entschieden haben."
+  },
+  {
+    "objectID": "ueberlegungen.html#teil-1-aufbau-des-netzes",
+    "href": "ueberlegungen.html#teil-1-aufbau-des-netzes",
+    "title": "Überlegungen",
+    "section": "Teil 1: Aufbau des Netzes",
+    "text": "Teil 1: Aufbau des Netzes\n\nKlassen wie in der Angabe: Neuron → Layer → NeuralNetwork. Das ist langsamer als Matrizen, aber man sieht bei jedem Neuron, was passiert. Das war uns wichtiger als Tempo.\nKein numpy: Wir wollten jede Rechnung selbst schreiben. Bei so kleinen Netzen ist reines Python schnell genug (Teil 2 braucht ca. 23 Sekunden).\nKostenfunktion ½·(ŷ − y)²: Durch das ½ ist die Ableitung einfach ŷ − y. Das macht den Code kürzer.\nSigmoid-Ableitung über den Ausgang: a · (1 − a). Dafür merkt sich jedes Neuron seinen letzten Ausgang.\nStolperstelle: Der Fehler für die vorige Schicht muss mit den alten Gewichten berechnet werden. Deshalb rechnet Layer.backward zuerst prev_errors und passt erst danach die Gewichte an.\nStartwert (random.seed(1)): So kommen bei jedem Lauf dieselben Gewichte heraus, und die Ergebnisse lassen sich vergleichen."
+  },
+  {
+    "objectID": "ueberlegungen.html#teil-2-training-und-speichern",
+    "href": "ueberlegungen.html#teil-2-training-und-speichern",
+    "title": "Überlegungen",
+    "section": "Teil 2: Training und Speichern",
+    "text": "Teil 2: Training und Speichern\n\nDrei Formate, drei Zwecke: .json zum Wiederladen in Python, .txt zum Lesen und für C, .h für C ohne Datei (später ESP32).\n.txt-Format so gewählt, dass C es leicht lesen kann: eine Zeile pro Neuron (neuron 1 bias … weights …). Damit reicht in C ein einfaches fscanf.\nTest für den Export: Das neu geladene Netz muss für alle Eingaben exakt dasselbe ausgeben. Das hat geklappt."
+  },
+  {
+    "objectID": "ueberlegungen.html#teil-3-vergleich-mit-tensorflow",
+    "href": "ueberlegungen.html#teil-3-vergleich-mit-tensorflow",
+    "title": "Überlegungen",
+    "section": "Teil 3: Vergleich mit TensorFlow",
+    "text": "Teil 3: Vergleich mit TensorFlow\n\nFairer Vergleich: gleiche Architektur, 20000 Epochen, Lernrate 0,1 und batch_size=1, damit TensorFlow wie unser Netz nach jedem einzelnen Beispiel lernt.\nWas wir gelernt haben: TensorFlow ist bei XOR in einem lokalen Minimum hängen geblieben. Mit nur 2 versteckten Neuronen entscheiden die Startgewichte, ob XOR klappt.\nUnterschied bei der Fehlerformel: Keras mittelt den Fehler über alle Ausgänge. Dadurch ist der Gradient beim 7-Segment-Netz kleiner, und TensorFlow lernt langsamer.\nZeit: TensorFlow war hier viel langsamer, weil bei winzigen Netzen der Aufwand pro Schritt größer ist als die eigentliche Rechnung."
+  },
+  {
+    "objectID": "ueberlegungen.html#teil-4-und-5-c",
+    "href": "ueberlegungen.html#teil-4-und-5-c",
+    "title": "Überlegungen",
+    "section": "Teil 4 und 5: C",
+    "text": "Teil 4 und 5: C\n\nNur Vorhersage, kein Training: Laut Angabe soll C nur vorwärts rechnen. Die Gewichte kommen aus Python.\nGleiche Struktur wie in Python (Network → Layer → Neuron), damit man beide Versionen vergleichen kann.\nHeader mit Init-Funktion: Python erzeugt die .h samt SEG_NET_init(). So muss niemand Zahlen abtippen, und der ESP32 braucht später kein Dateisystem.\nCompiler: Es war kein gcc installiert. zig cc lässt sich über pip installieren und ist ein vollwertiger C-Compiler (clang). build.bat nimmt gcc, wenn vorhanden, sonst Zig."
+  },
+  {
+    "objectID": "ueberlegungen.html#erklär-website-zusätzlich",
+    "href": "ueberlegungen.html#erklär-website-zusätzlich",
+    "title": "Überlegungen",
+    "section": "Erklär-Website (zusätzlich)",
+    "text": "Erklär-Website (zusätzlich)\n\nZiel: das Projekt in der Präsentation Schritt für Schritt zeigen können, mit Animationen statt Folien.\nNetz im Browser in JavaScript nachgebaut (gleicher Algorithmus), damit man live zusehen kann, wie es lernt. Die Gewichte für die Anzeige kommen aber aus den echten Python-Dateien.\nKleiner lokaler Server (nur Python-Standardbibliothek): Er startet die Skripte auf Knopfdruck. Aus Sicherheitsgründen ist er nur lokal erreichbar und startet nur eine feste Liste von Befehlen."
+  },
+  {
+    "objectID": "ueberlegungen.html#was-wir-anders-machen-würden",
+    "href": "ueberlegungen.html#was-wir-anders-machen-würden",
+    "title": "Überlegungen",
+    "section": "Was wir anders machen würden",
+    "text": "Was wir anders machen würden\n\nGleich am Anfang mehrere Startwerte testen, statt nur einen. Das Problem mit dem lokalen Minimum wäre sonst früher aufgefallen.\nDie Zeitmessung in Teil 3 auch mit größeren Batches machen. Dann wäre TensorFlow fairer bewertet."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Überblick",
+    "section": "",
+    "text": "Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen, das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen. Die Übung hat 6 Teile. Teil 1–5 sind fertig. Teil 6 (ESP32) ist laut Lehrer noch nicht dran."
+  },
+  {
+    "objectID": "index.html#aufgabe",
+    "href": "index.html#aufgabe",
+    "title": "Überblick",
+    "section": "",
+    "text": "Ein neuronales Netz ohne KI-Bibliothek selbst bauen, damit XOR und einen 7-Segment-Decoder lernen, das Ergebnis mit TensorFlow vergleichen und das trainierte Netz in C laufen lassen. Die Übung hat 6 Teile. Teil 1–5 sind fertig. Teil 6 (ESP32) ist laut Lehrer noch nicht dran."
+  },
+  {
+    "objectID": "index.html#was-wir-gebaut-haben",
+    "href": "index.html#was-wir-gebaut-haben",
+    "title": "Überblick",
+    "section": "Was wir gebaut haben",
+    "text": "Was wir gebaut haben\n\n\n\n\n\n\n\n\nTeil\nInhalt\nOrt\n\n\n\n\n1\nKlassen Neuron, Layer, NeuralNetwork mit Training und Export\npython/nn.py\n\n\n2\nXOR (2-2-1) und 7-Segment (4-16-7) trainieren, speichern, neu laden, testen\npython/part2_train.py\n\n\n3\nDieselben Netze mit TensorFlow, Vergleich\npython/part3_tensorflow.py\n\n\n4\nC-Programm lädt das Netz aus .txt\nc/part4_txt.c\n\n\n5\nC-Programm nutzt den erzeugten Header .h\nc/part5_header.c\n\n\nextra\nErklär-Website mit Animationen, startet alle Skripte\nweb/"
+  },
+  {
+    "objectID": "index.html#verwendete-tools",
+    "href": "index.html#verwendete-tools",
+    "title": "Überblick",
+    "section": "Verwendete Tools",
+    "text": "Verwendete Tools\n\n\n\n\n\n\n\n\nTool\nWofür\nWarum\n\n\n\n\nPython 3.10 (nur Standardbibliothek)\nNetz und Training\nJede Rechnung soll im eigenen Code sichtbar sein, keine fertige Mathe-Bibliothek\n\n\nTensorFlow / Keras\nVergleich in Teil 3\nVorgabe der Aufgabe\n\n\nC99 mit Zig cc\nTeil 4 und 5\nAuf dem Rechner war kein gcc; Zig bringt einen fertigen C-Compiler über pip install ziglang mit\n\n\nHTML, CSS, JavaScript, Python-http.server\nErklär-Website\nLäuft ohne Installation; der kleine Server startet die Skripte\n\n\nGit + GitHub\nVersionen, Abgabe\nKleine Commits, ein Commit pro Teil\n\n\nQuarto\ndiese Doku\nVorgabe im INSY-Regelwerk\n\n\nKI-Assistent\nCode, Doku, Debugging\nIm INSY-Unterricht ausdrücklich erlaubt"
+  },
+  {
+    "objectID": "index.html#starten",
+    "href": "index.html#starten",
+    "title": "Überblick",
+    "section": "Starten",
+    "text": "Starten\ncd python && python part2_train.py   # Teil 2\nc\\build.bat                          # Teil 4 + 5 bauen\npython web/server.py                 # Website mit allem"
+  },
+  {
+    "objectID": "ergebnisse.html",
+    "href": "ergebnisse.html",
+    "title": "Ergebnisse",
+    "section": "",
+    "text": "Alle Zahlen stammen aus den Dateien in output/."
+  },
+  {
+    "objectID": "ergebnisse.html#eigenes-netz-teil-2",
+    "href": "ergebnisse.html#eigenes-netz-teil-2",
+    "title": "Ergebnisse",
+    "section": "Eigenes Netz (Teil 2)",
+    "text": "Eigenes Netz (Teil 2)\n\n\n\n\n\n\n\n\n\n\nNetz\nArchitektur\nMSE am Ende\nrichtige Bits\nExport → Import gleich\n\n\n\n\nXOR\n2-2-1\n0.00127\n4/4\nja\n\n\n7-Segment\n4-16-7\n0.00012\n70/70\nja\n\n\n\nBei XOR bleibt der Fehler bis etwa Epoche 6000 bei 0,25 und fällt dann stark ab. Das Netz muss erst „herausfinden“, wie es die beiden versteckten Neuronen unterschiedlich nutzt."
+  },
+  {
+    "objectID": "ergebnisse.html#vergleich-mit-tensorflow-teil-3",
+    "href": "ergebnisse.html#vergleich-mit-tensorflow-teil-3",
+    "title": "Ergebnisse",
+    "section": "Vergleich mit TensorFlow (Teil 3)",
+    "text": "Vergleich mit TensorFlow (Teil 3)\n\n\n\nNetz\nVersion\nMSE am Ende\nrichtige Bits\nTrainingszeit\n\n\n\n\nXOR\neigenes Netz\n0.00127\n4/4\n0.9 s\n\n\nXOR\nTensorFlow\n0.168\n3/4\n858 s\n\n\n7-Segment\neigenes Netz\n0.00012\n70/70\n20 s\n\n\n7-Segment\nTensorFlow\n0.00071\n70/70\n1085 s"
+  },
+  {
+    "objectID": "ergebnisse.html#c-teil-4-und-5",
+    "href": "ergebnisse.html#c-teil-4-und-5",
+    "title": "Ergebnisse",
+    "section": "C (Teil 4 und 5)",
+    "text": "C (Teil 4 und 5)\nBeide C-Programme liefern dieselben Ausgaben wie Python, mit 70/70 richtigen Bits."
+  },
+  {
+    "objectID": "ergebnisse.html#fazit",
+    "href": "ergebnisse.html#fazit",
+    "title": "Ergebnisse",
+    "section": "Fazit",
+    "text": "Fazit\nEin neuronales Netz besteht am Ende nur aus Malnehmen, Zusammenzählen und der Sigmoid-Funktion. Lernen heißt, alle Gewichte 20000-mal ein kleines Stück in die Richtung zu schieben, in der der Fehler kleiner wird. Das trainierte Netz besteht nur aus Zahlen. Deshalb kann man es speichern und in jeder Sprache wieder benutzen."
+  },
+  {
+    "objectID": "tokens.html",
+    "href": "tokens.html",
+    "title": "Token-Verbrauch",
+    "section": "",
+    "text": "Das ganze Projekt (Code, Website, Doku, Fehlersuche) entstand mit einem KI-Assistenten (Claude Code). Hier steht, wie viele Tokens dafür verbraucht wurden und was wir getan haben, um sparsam zu bleiben."
+  },
+  {
+    "objectID": "tokens.html#verbrauch-in-dieser-sitzung",
+    "href": "tokens.html#verbrauch-in-dieser-sitzung",
+    "title": "Token-Verbrauch",
+    "section": "Verbrauch in dieser Sitzung",
+    "text": "Verbrauch in dieser Sitzung\n\n\n\n\n\n\n\n\nArt\nTokens\nBedeutung\n\n\n\n\nNeu gelesene Eingabe\nca. 200\nText, der nicht aus dem Zwischenspeicher kam\n\n\nAusgabe\nca. 139 000\nAlles, was die KI geschrieben hat (Code, Doku, Antworten)\n\n\nIn den Zwischenspeicher geschrieben\nca. 678 000\nGesprächsverlauf, der neu gespeichert wurde\n\n\nAus dem Zwischenspeicher gelesen\nca. 20 500 000\nBei jeder Antwort wird der bisherige Verlauf erneut gelesen\n\n\n\n\n\n\nModell\nAntworten\nAusgabe-Tokens\n\n\n\n\nOpus 5.5\n100\nca. 135 900\n\n\nSonnet 5.5\n8\nca. 3 500\n\n\n\nWie man die Zahlen liest: Die große Zahl (20,5 Mio.) sieht dramatisch aus, ist aber gewollt: Der Zwischenspeicher (Prompt Caching) sorgt dafür, dass der lange Verlauf bei jeder Antwort nicht neu berechnet werden muss. Er wird deutlich günstiger abgerechnet als neue Eingabe. Entscheidend für den echten Aufwand sind vor allem die Ausgabe-Tokens und der Verlauf: Je länger ein Gespräch, desto mehr wird bei jeder Antwort mitgelesen."
+  },
+  {
+    "objectID": "tokens.html#füllstand-des-gesprächs",
+    "href": "tokens.html#füllstand-des-gesprächs",
+    "title": "Token-Verbrauch",
+    "section": "Füllstand des Gesprächs",
+    "text": "Füllstand des Gesprächs\n\n\n\nVerlauf zum Messzeitpunkt\nca. 268 000 von 1 000 000 Tokens (27 %)\n\n\ndavon Nachrichten\nca. 188 000\n\n\ndavon Werkzeuge, Skills, Systemtext, Merkdateien\nca. 76 000\n\n\nAutomatisches Zusammenfassen ab\n97 %\n\n\n\nDas Gespräch war also nie in Gefahr, abgeschnitten zu werden."
+  },
+  {
+    "objectID": "tokens.html#tarif-limits",
+    "href": "tokens.html#tarif-limits",
+    "title": "Token-Verbrauch",
+    "section": "Tarif-Limits",
+    "text": "Tarif-Limits\nTarif: Pro. Zum Messzeitpunkt waren 16 % des 5-Stunden-Limits und 37 % des Wochenlimits (alle Modelle) verbraucht. Das Wochenlimit enthält auch andere Arbeit des Kontos, nicht nur dieses Projekt."
+  },
+  {
+    "objectID": "tokens.html#wie-wir-tokens-gespart-haben",
+    "href": "tokens.html#wie-wir-tokens-gespart-haben",
+    "title": "Token-Verbrauch",
+    "section": "Wie wir Tokens gespart haben",
+    "text": "Wie wir Tokens gespart haben\n\nFeste Sparregel in der persönlichen Konfiguration (CLAUDE.md): kurz antworten, nur nötige Dateiteile lesen, unabhängige Werkzeugaufrufe zusammenfassen. Qualität und Prüfungen gehen dabei immer vor.\nKnappe Antwortweise („Caveman-Modus“) für Zwischenmeldungen: keine Füllsätze, weniger Ausgabe-Tokens.\nKeine Sub-Agenten gestartet. Jeder Sub-Agent beginnt ohne Vorwissen und müsste den Zusammenhang neu lesen.\nLangsame Läufe im Hintergrund: Der TensorFlow-Vergleich (ca. 30 Minuten) lief im Hintergrund, ohne dass dabei ständig nachgefragt wurde.\nErgebnisse in Dateien statt im Gespräch: Trainingsausgaben liegen in output/. Die Website und die Doku lesen sie von dort, statt dass lange Ausgaben im Chat wiederholt werden.\nBewusst breit gebaut, dann geprüft: Website und Skripte wurden in wenigen großen Schritten geschrieben und im Browser getestet, statt viele kleine Änderungen einzeln zu besprechen."
+  },
+  {
+    "objectID": "tokens.html#was-mehr-tokens-gekostet-hat",
+    "href": "tokens.html#was-mehr-tokens-gekostet-hat",
+    "title": "Token-Verbrauch",
+    "section": "Was mehr Tokens gekostet hat",
+    "text": "Was mehr Tokens gekostet hat\n\nDie Erklär-Website (rund 1 900 Zeilen HTML, CSS und JavaScript) war mit Abstand der größte Einzelposten bei der Ausgabe.\nTests im Browser (Screenshots und Seitenabfragen) und der Fehler mit den Windows-Zeilenumbrüchen brauchten zusätzliche Runden.\nDie langen Nachrichten des Datei-Lesens am Anfang (PDF-Aufgabenblätter)."
+  },
+  {
+    "objectID": "tokens.html#fazit",
+    "href": "tokens.html#fazit",
+    "title": "Token-Verbrauch",
+    "section": "Fazit",
+    "text": "Fazit\nEin Projekt dieser Größe (fünf Teile, Website, Doku) braucht rund 140 000 Ausgabe-Tokens. Der meiste Verbrauch entsteht nicht durch das Schreiben, sondern durch das ständige Mitlesen des langen Verlaufs. Kurze, klar abgegrenzte Aufträge und das Auslagern langer Ausgaben in Dateien sind deshalb die wirksamsten Sparmaßnahmen."
+  }
+]
