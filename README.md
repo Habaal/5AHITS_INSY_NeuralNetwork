@@ -13,6 +13,7 @@ Teil 6 (ESP32) ist laut Lehrer noch nicht dran.
 | `c/nn.h`, `c/nn.c` | Netz in C (nur Forward/Predict), Laden aus `.txt` |
 | `c/part4_txt.c` | **Teil 4:** Netz aus `output/7seg_net.txt` laden und testen |
 | `c/part5_header.c` | **Teil 5:** Netz aus `output/7seg_net.h` initialisieren und testen |
+| `doku/` | Quarto-Doku (Überblick, Überlegungen, Ergebnisse): `cd doku && quarto preview` |
 | `web/` | Erklär-Website mit Animationen (`python web/server.py`) |
 | `output/` | exportierte Netze (`.json`, `.txt`, `.h`) und Testausgaben (`partX_ergebnis.txt`) |
 
