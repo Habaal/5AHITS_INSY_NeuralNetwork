@@ -3,3 +3,4 @@ __pycache__/
 *.pdb
 *.obj
 output/part3_raw.txt
+.claude/

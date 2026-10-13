@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neuronales Netz erklärt</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <button id="menuBtn" class="ghost" aria-label="Menü">☰</button>
+  <h1>Neuronales Netz von Grund auf</h1>
+  <span class="sub">INSY 5AHITS · Teil 1–5</span>
+  <span id="serverState" class="chip">Server wird geprüft …</span>
+</header>
+
+<nav id="sidebar"><ol id="toc"></ol></nav>
+
+<main id="main">
+
+<!-- ============================================================ 1 -->
+<section class="chapter" id="k-ueberblick" data-title="Überblick">
+  <h2>Worum geht es?</h2>
+  <p class="lead">Wir bauen ein neuronales Netz <b>ohne fertige KI-Bibliothek</b>, trainieren es,
+  speichern es ab, vergleichen es mit TensorFlow und lassen es dann in <b>C</b> laufen.</p>
+  <div class="card">
+    <svg id="pipeSvg" viewBox="0 0 960 230" class="wide"></svg>
+    <p id="pipeText" class="caption">Klick auf „Ablauf zeigen“.</p>
+    <div class="row"><button id="pipePlay">▶ Ablauf zeigen</button></div>
+  </div>
+  <div class="card">
+    <h3>Alles nacheinander starten</h3>
+    <p>Startet die echten Skripte der Reihe nach: Teil 2 (Training) → C bauen → Teil 4 → Teil 5.</p>
+    <label class="check"><input type="checkbox" id="allPart3"> Teil 3 (TensorFlow) auch starten – dauert ca. 30 Minuten!</label>
+    <div class="row"><button id="runAll">▶ Alle Skripte starten</button></div>
+    <div id="runAllSteps" class="steps"></div>
+    <pre id="runAllOut" class="console"></pre>
+  </div>
+  <div class="card hint">
+    <b>Bedienung:</b> Links die Kapitel, unten „Weiter“. Pfeiltasten ← → wechseln auch das Kapitel.
+    In jedem Kapitel gibt es Knöpfe für die Animationen.
+  </div>
+</section>
+
+<!-- ============================================================ 2 -->
+<section class="chapter" id="k-neuron" data-title="1 · Das Neuron">
+  <h2>Ein einzelnes Neuron</h2>
+  <p class="lead">Ein Neuron macht nur drei Dinge: <b>malnehmen</b>, <b>zusammenzählen</b>, <b>quetschen</b>.</p>
+  <div class="grid2">
+    <div class="card">
+      <svg id="neuronSvg" viewBox="0 0 560 300" class="wide"></svg>
+      <p id="neuronStep" class="caption">Klick auf „Rechnung abspielen“.</p>
+      <div class="row">
+        <button id="neuronPlay">▶ Rechnung abspielen</button>
+        <button class="ghost" id="presetAnd">als UND</button>
+        <button class="ghost" id="presetOr">als ODER</button>
+        <button class="ghost" id="presetXor">XOR versuchen</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sliders">
+        <label>x₁ <input type="range" id="nx1" min="0" max="1" step="1" value="1"><output></output></label>
+        <label>x₂ <input type="range" id="nx2" min="0" max="1" step="1" value="0"><output></output></label>
+        <label>w₁ <input type="range" id="nw1" min="-8" max="8" step="0.1" value="2"><output></output></label>
+        <label>w₂ <input type="range" id="nw2" min="-8" max="8" step="0.1" value="-1"><output></output></label>
+        <label>Bias b <input type="range" id="nb" min="-8" max="8" step="0.1" value="0.5"><output></output></label>
+      </div>
+      <div id="neuronFormula" class="formula"></div>
+      <h4>Was kommt bei allen 4 Eingaben heraus?</h4>
+      <table id="neuronTable" class="tbl"></table>
+      <p id="neuronMsg" class="small"></p>
+    </div>
+  </div>
+  <div class="card explain">
+    <ol>
+      <li><b>Malnehmen:</b> jeder Eingang x wird mit seinem Gewicht w multipliziert. Das Gewicht sagt, wie wichtig der Eingang ist (negativ = „dagegen“).</li>
+      <li><b>Zusammenzählen:</b> alle Produkte plus der Bias b ergeben z.</li>
+      <li><b>Quetschen:</b> die Sigmoid-Funktion macht aus z eine Zahl zwischen 0 und 1 – den Ausgang a.</li>
+    </ol>
+    <p>Mit den Knöpfen „als UND“ / „als ODER“ siehst du: ein Neuron kann einfache Regeln lernen.
+    <b>XOR schafft ein einzelnes Neuron nie</b> – dafür braucht man eine versteckte Schicht. Darum hat unser Netz 2-2-1.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 3 -->
+<section class="chapter" id="k-sigmoid" data-title="2 · Sigmoid">
+  <h2>Die Sigmoid-Funktion</h2>
+  <p class="lead">σ(z) = 1 / (1 + e<sup>−z</sup>) macht aus jeder Zahl einen Wert zwischen 0 und 1.</p>
+  <div class="card">
+    <canvas id="sigCanvas" width="900" height="360" class="wide"></canvas>
+    <div class="row">
+      <label class="inline">z = <input type="range" id="sigZ" min="-8" max="8" step="0.05" value="0"> <output id="sigZo"></output></label>
+      <button id="sigSweep">▶ z durchlaufen</button>
+      <label class="check"><input type="checkbox" id="sigDeriv" checked> Ableitung σ'(z) = a·(1−a) zeigen</label>
+    </div>
+    <p id="sigText" class="caption"></p>
+  </div>
+  <div class="card explain">
+    <ul>
+      <li>Großes positives z → Ausgang fast <b>1</b>. Großes negatives z → fast <b>0</b>. Bei z = 0 genau 0,5.</li>
+      <li>Die <span class="c2">Ableitung</span> sagt, wie stark sich der Ausgang ändert, wenn z sich ändert.
+        Sie ist höchstens 0,25 (bei z = 0) und am Rand fast 0.</li>
+      <li>Praktisch: die Ableitung lässt sich aus dem Ausgang selbst berechnen: <code>a · (1 − a)</code>.
+        Genau das steht im Code: <code>lambda a: a * (1.0 - a)</code>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ 4 -->
+<section class="chapter" id="k-forward" data-title="3 · Vorwärts rechnen">
+  <h2>Forward Pass: vom Eingang zum Ergebnis</h2>
+  <p class="lead">Das Netz für XOR: 2 Eingänge → 2 versteckte Neuronen → 1 Ausgang.
+  Die Gewichte kommen aus <code>output/xor_net.json</code> – also aus unserem echten Training.</p>
+  <div class="grid2">
+    <div class="card">
+      <svg id="fwdSvg" viewBox="0 0 560 340" class="wide"></svg>
+      <p id="fwdText" class="caption">Wähle eine Eingabe.</p>
+      <div class="row" id="fwdBtns"></div>
+      <div class="row"><button id="fwdAll">▶ alle 4 nacheinander</button></div>
+    </div>
+    <div class="card">
+      <h4>Ergebnisse</h4>
+      <table id="fwdTable" class="tbl"></table>
+      <div class="legend">
+        <span><i class="sw pos"></i> positives Gewicht</span>
+        <span><i class="sw neg"></i> negatives Gewicht</span>
+        <span>dicker Strich = großes Gewicht</span>
+        <span>helles Neuron = Ausgang nahe 1</span>
+      </div>
+      <p class="small">Fahr mit der Maus über eine Linie, um das Gewicht zu sehen.</p>
+    </div>
+  </div>
+  <div class="card explain">
+    <p>Jede Schicht rechnet genau wie das Neuron aus Kapitel 1. Der Ausgang der einen Schicht ist der Eingang der nächsten.
+    Im Code ist das <code>NeuralNetwork.forward()</code>: eine Schleife über alle Schichten.</p>
+    <p>Schau in der Tabelle, was die zwei <b>versteckten Neuronen</b> (h₁, h₂) ausgeben: jedes erkennt nur einen Teil des Musters.
+    Erst das Ausgangsneuron kombiniert beide zu XOR. Welche Teilregel jedes Neuron lernt, hängt von den Startgewichten ab.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 5 -->
+<section class="chapter" id="k-gradient" data-title="4 · Gradientenabstieg">
+  <h2>Lernen = bergab rollen</h2>
+  <p class="lead">Der <b>Fehler</b> hängt von den Gewichten ab. Lernen heißt: die Gewichte so verschieben, dass der Fehler kleiner wird.</p>
+  <div class="card">
+    <canvas id="gdCanvas" width="900" height="380" class="wide"></canvas>
+    <div class="row">
+      <button id="gdStep">Einen Schritt</button>
+      <button id="gdAuto">▶ automatisch</button>
+      <button class="ghost" id="gdReset">Neu starten</button>
+      <label class="inline">Lernrate α <input type="range" id="gdLr" min="0.02" max="1.2" step="0.01" value="0.15"> <output id="gdLro"></output></label>
+    </div>
+    <p id="gdText" class="caption"></p>
+  </div>
+  <div class="card explain">
+    <ul>
+      <li>Die Kurve zeigt den Fehler für jeden möglichen Wert eines Gewichts w.</li>
+      <li>Die <span class="c2">orange Linie</span> ist die Steigung (Gradient) an der aktuellen Stelle.</li>
+      <li>Regel: <code>w_neu = w − α · Steigung</code>. Ist die Steigung positiv, gehen wir nach links – und umgekehrt.</li>
+      <li><b>Lernrate zu klein:</b> sehr langsam. <b>Zu groß (&gt; 1):</b> die Kugel springt über das Tal und schaukelt sich auf. Probier es aus!</li>
+      <li>Im echten Netz gibt es viele Gewichte gleichzeitig – das Prinzip ist dasselbe, nur in vielen Dimensionen.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ 6 -->
+<section class="chapter" id="k-backprop" data-title="5 · Backpropagation">
+  <h2>Backpropagation Schritt für Schritt</h2>
+  <p class="lead">Ein Trainingsschritt mit einem Beispiel: Eingabe <b>[1, 0]</b>, Soll-Ausgang <b>1</b>, Lernrate 0,5.
+  Alle Zahlen sind echt gerechnet.</p>
+  <div class="grid2">
+    <div class="card">
+      <svg id="bpSvg" viewBox="0 0 560 340" class="wide"></svg>
+      <div class="row">
+        <button class="ghost" id="bpPrev">◀ zurück</button>
+        <button id="bpNext">Weiter ▶</button>
+        <button class="ghost" id="bpReset">Neue Startgewichte</button>
+      </div>
+      <div class="progress"><div id="bpBar"></div></div>
+    </div>
+    <div class="card">
+      <h4 id="bpTitle"></h4>
+      <div id="bpBody" class="bpbody"></div>
+    </div>
+  </div>
+  <div class="card explain">
+    <p>So steht es im Code (<code>Layer.backward</code>):</p>
+<pre class="code">delta = error * df(neuron.output)        # Fehler · Sigmoid-Ableitung
+prev_errors[i] += delta * neuron.weights[i]  # Fehler nach hinten (alte Gewichte!)
+neuron.update(delta, learning_rate)       # w -= α · delta · x ;  b -= α · delta</pre>
+  </div>
+</section>
+
+<!-- ============================================================ 7 -->
+<section class="chapter" id="k-train" data-title="6 · Training live (XOR)">
+  <h2>Training live: XOR lernen</h2>
+  <p class="lead">Hier läuft derselbe Algorithmus wie in <code>nn.py</code> – direkt im Browser.
+  Du siehst, wie die Gewichte wachsen und der Fehler fällt.</p>
+  <div class="grid3">
+    <div class="card">
+      <h4>Netz</h4>
+      <svg id="trNet" viewBox="0 0 560 340" class="wide"></svg>
+    </div>
+    <div class="card">
+      <h4>Fehler (MSE) pro Epoche</h4>
+      <canvas id="trLoss" width="560" height="340" class="wide"></canvas>
+    </div>
+    <div class="card">
+      <h4>Was das Netz für jede Eingabe sagt</h4>
+      <canvas id="trMap" width="340" height="340" class="square"></canvas>
+      <p class="small">Fläche = Ausgang für Eingaben zwischen 0 und 1. <span class="c1">Blau</span> = 1, hell = 0.
+      Die 4 Punkte sind die Trainingsdaten.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <button id="trStart">▶ Start</button>
+      <button class="ghost" id="trReset">Neue Startgewichte</button>
+      <label class="inline">Tempo <input type="range" id="trSpeed" min="1" max="400" step="1" value="40"> <output id="trSpeedo"></output> Epochen/Bild</label>
+      <label class="inline">Lernrate <input type="range" id="trLr" min="0.05" max="2" step="0.05" value="0.1"> <output id="trLro"></output></label>
+      <span class="stat">Epoche <b id="trEpoch">0</b> / 20000</span>
+      <span class="stat">MSE <b id="trMse">–</b></span>
+      <span class="stat">Start-Nr. <b id="trSeed">1</b></span>
+    </div>
+    <p id="trText" class="caption"></p>
+  </div>
+  <div class="card explain">
+    <ul>
+      <li><b>Plateau:</b> am Anfang bleibt der Fehler oft lange bei ca. 0,25 und fällt dann plötzlich. Genau das stand auch im Python-Log (bis Epoche ~6000).</li>
+      <li><b>Lokales Minimum:</b> Klick ein paarmal auf „Neue Startgewichte“. Manchmal bleibt das Netz hängen und lernt XOR nie –
+        das ist TensorFlow in Teil 3 passiert (Ausgang 0,33 bei drei Eingaben).</li>
+      <li>Eine <b>Epoche</b> = einmal alle 4 Beispiele durchgehen.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ 8 -->
+<section class="chapter" id="k-7seg" data-title="7 · 7-Segment-Decoder">
+  <h2>7-Segment-Decoder</h2>
+  <p class="lead">4 Bits (Ziffer 0–9) rein, 7 Segmente (A–G) raus. Netz 4-16-7, Gewichte aus <code>output/7seg_net.json</code>.</p>
+  <div class="grid2 wideLeft">
+    <div class="card">
+      <svg id="segNet" viewBox="0 0 640 420" class="wide"></svg>
+      <div class="row" id="segBtns"></div>
+      <div class="row"><button id="segAll">▶ 0 bis 9 durchlaufen</button></div>
+    </div>
+    <div class="card center">
+      <svg id="segDisp" viewBox="0 0 200 320" class="disp"></svg>
+      <div id="segBars" class="bars"></div>
+      <p id="segText" class="caption"></p>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Im Browser neu trainieren</h3>
+    <p>Startet mit zufälligen Gewichten. Unten siehst du alle 10 Ziffern so, wie das Netz sie <i>gerade</i> anzeigen würde – sie werden beim Lernen immer schärfer.</p>
+    <div class="row">
+      <button id="segTrain">▶ Training starten</button>
+      <button class="ghost" id="segUsePy">Python-Gewichte laden</button>
+      <span class="stat">Epoche <b id="segEpoch">–</b></span>
+      <span class="stat">MSE <b id="segMse">–</b></span>
+      <span class="stat">richtige Bits <b id="segBits">–</b></span>
+    </div>
+    <div id="segGrid" class="seggrid"></div>
+  </div>
+  <div class="card explain">
+    <p>Jeder Ausgang ist eine Zahl zwischen 0 und 1. Ab <b>0,5</b> gilt das Segment als „an“ (Schwelle).
+    Die Helligkeit der Segmente oben zeigt den echten Wert.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 9 -->
+<section class="chapter" id="k-export" data-title="8 · Speichern (Export)">
+  <h2>Das trainierte Netz speichern</h2>
+  <p class="lead">Ein Netz <i>ist</i> nur seine Zahlen: Gewichte und Biases. Die schreiben wir in drei Formate.</p>
+  <div class="grid2">
+    <div class="card">
+      <svg id="exNet" viewBox="0 0 560 340" class="wide"></svg>
+      <p class="caption" id="exText">Klick ein Neuron an – rechts wird seine Zeile markiert.</p>
+      <div class="row"><button id="exPlay">▶ Export animieren</button></div>
+    </div>
+    <div class="card">
+      <div class="tabs" id="exTabs">
+        <button data-f="txt" class="on">.txt</button>
+        <button data-f="json">.json</button>
+        <button data-f="h">.h</button>
+      </div>
+      <pre id="exFile" class="file"></pre>
+    </div>
+  </div>
+  <div class="card explain">
+    <ul>
+      <li><b>.json</b> – zum Wiederladen in Python (<code>NeuralNetwork.load</code>). Test: das geladene Netz rechnet exakt gleich.</li>
+      <li><b>.txt</b> – für Menschen lesbar und für C mit <code>fscanf</code> einlesbar (Teil 4).</li>
+      <li><b>.h</b> – C-Header mit allen Zahlen als Konstanten und der Funktion <code>SEG_NET_init()</code> (Teil 5). So braucht das C-Programm – und später der ESP32 – keine Datei.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ 10 -->
+<section class="chapter" id="k-part2" data-title="9 · Teil 2 starten">
+  <h2>Teil 2 ausführen: <code>python part2_train.py</code></h2>
+  <p class="lead">Trainiert XOR und 7-Segment mit 20000 Epochen, speichert, lädt neu und testet. Dauert ca. 25 Sekunden.</p>
+  <div class="grid2">
+    <div class="card">
+      <div class="row"><button id="p2Run">▶ Skript starten</button><span id="p2State" class="chip"></span></div>
+      <pre id="p2Out" class="console"></pre>
+    </div>
+    <div class="card">
+      <h4>Fehlerkurve (live aus der Ausgabe)</h4>
+      <canvas id="p2Chart" width="560" height="300" class="wide"></canvas>
+      <div class="legend" id="p2Legend">
+        <span><i class="sw pos"></i> XOR</span><span><i class="sw neg"></i> 7-Segment</span>
+      </div>
+      <div id="p2Result" class="results"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 11 -->
+<section class="chapter" id="k-tf" data-title="10 · Vergleich TensorFlow">
+  <h2>Teil 3: Unser Netz gegen TensorFlow</h2>
+  <p class="lead">Gleiche Netze, 20000 Epochen, Lernrate 0,1, ein Beispiel pro Schritt. Daten aus <code>output/part3_ergebnis.txt</code>.</p>
+  <div class="grid2">
+    <div class="card"><h4>Trainingszeit in Sekunden</h4><div id="tfTime" class="hbars"></div></div>
+    <div class="card"><h4>Fehler am Ende (MSE, kleiner = besser)</h4><div id="tfMse" class="hbars"></div></div>
+  </div>
+  <div class="card">
+    <h4>XOR: was kommt raus?</h4>
+    <div id="tfXor" class="xorcmp"></div>
+    <div class="row"><button id="tfPlay">▶ Vergleich animieren</button></div>
+  </div>
+  <div class="card explain">
+    <ul>
+      <li><b>XOR:</b> TensorFlow ist in einem <b>lokalen Minimum</b> hängen geblieben: es gibt bei drei Eingaben 0,33 aus. Mit nur 2 versteckten Neuronen entscheiden die zufälligen Startwerte (siehe Kapitel 6).</li>
+      <li><b>7-Segment:</b> beide 70/70 richtig. TensorFlow lernt langsamer, weil Keras den Fehler über die 7 Ausgänge mittelt – der Gradient ist nur 2/7 so groß wie bei uns.</li>
+      <li><b>Zeit:</b> bei winzigen Netzen und einem Beispiel pro Schritt kostet der Verwaltungsaufwand von TensorFlow mehr als die Rechnung. Bei großen Netzen wäre TensorFlow viel schneller.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Selbst ausführen</h4>
+    <p class="warn">Achtung: dauert ca. 30 Minuten und braucht <code>pip install tensorflow</code>.</p>
+    <div class="row"><button id="p3Run">▶ Teil 3 starten</button><span id="p3State" class="chip"></span></div>
+    <pre id="p3Out" class="console"></pre>
+  </div>
+</section>
+
+<!-- ============================================================ 12 -->
+<section class="chapter" id="k-c" data-title="11 · C-Programm">
+  <h2>Teil 4 und 5: Das Netz in C</h2>
+  <p class="lead">In C wird <b>nicht trainiert</b> – nur vorwärts gerechnet. Die Gewichte kommen aus Python.</p>
+  <div class="card">
+    <svg id="cSvg" viewBox="0 0 960 300" class="wide"></svg>
+    <p id="cText" class="caption">Klick auf „Weg der Gewichte zeigen“.</p>
+    <div class="row"><button id="cPlay">▶ Weg der Gewichte zeigen</button></div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <button id="cBuild">1. C bauen</button>
+      <button id="cP4">2. Teil 4 (.txt)</button>
+      <button id="cP5">3. Teil 5 (.h)</button>
+      <span id="cState" class="chip"></span>
+    </div>
+    <div id="cDigits" class="seggrid"></div>
+    <pre id="cOut" class="console"></pre>
+  </div>
+  <div class="card explain">
+    <ul>
+      <li><b>Structs:</b> <code>Network</code> enthält <code>Layer</code>s, jeder Layer enthält <code>Neuron</code>s – genau wie die Python-Klassen.</li>
+      <li><b>Teil 4:</b> <code>net_load_txt()</code> liest die .txt-Datei Zeile für Zeile mit <code>fscanf</code>.</li>
+      <li><b>Teil 5:</b> <code>#include "7seg_net.h"</code> – die Zahlen sind schon im Programm, <code>SEG_NET_init()</code> kopiert sie in die Structs.</li>
+      <li>Beide liefern dieselben Werte wie Python: 70/70 Bits richtig.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ 13 -->
+<section class="chapter" id="k-ende" data-title="Zusammenfassung">
+  <h2>Zusammenfassung</h2>
+  <div class="card">
+    <ol class="summary">
+      <li><b>Neuron:</b> malnehmen, zusammenzählen, Sigmoid.</li>
+      <li><b>Netz:</b> Schichten hintereinander, Ausgang der einen = Eingang der nächsten.</li>
+      <li><b>Training:</b> Fehler messen, mit Backpropagation zurückrechnen, jedes Gewicht ein Stück „bergab“ schieben – 20000-mal.</li>
+      <li><b>Ergebnis:</b> XOR 4/4 und 7-Segment 70/70 richtig.</li>
+      <li><b>Export:</b> .json (Python), .txt (lesbar + C), .h (C-Header).</li>
+      <li><b>TensorFlow:</b> gleiche Idee; bei XOR hängen geblieben, bei winzigen Netzen viel langsamer.</li>
+      <li><b>C:</b> nur Vorhersage, Gewichte aus Datei oder Header, gleiche Ergebnisse.</li>
+      <li><b>Später:</b> Teil 6 – derselbe C-Code auf einem ESP32 mit echter 7-Segment-Anzeige.</li>
+    </ol>
+  </div>
+</section>
+
+<footer class="pager">
+  <button class="ghost" id="prevBtn">◀ Zurück</button>
+  <span id="pageInfo"></span>
+  <button id="nextBtn">Weiter ▶</button>
+</footer>
+</main>
+
+<div id="tip" class="tip"></div>
+<script src="app.js"></script>
+</body>
+</html>
